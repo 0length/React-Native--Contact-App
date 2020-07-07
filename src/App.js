@@ -17,6 +17,7 @@ import IconPlus from './../Assets/plus.svg'
 import IconPlusIOS from './../Assets/plus_ios.svg'
 import List from './List'
 import Show from './Show'
+import Update from './Update';
 
 // export interface People {
 //   name: string
@@ -28,16 +29,18 @@ const App: () => React$Node = () => {
 
   const [peoples, setPeoples] = useState({ data: {...DummyPeople} })
   const [selected, setSelected] = useState({ data: {} })
-  const [screen, setScreen] = useState('')
+  const [screen, setScreen] = useState({data: '', prev: ''})
 
-  const select = useCallback((data)=>{
-    setSelected((old)=>({...old, data}))
-  }, [setSelected])
+  const select =(newData, idx)=>{
+    setSelected((old)=>({data: {...[...Object.values(old.data), {...newData, idx}]}}))
+  }
 
-  const handlePerItem = useCallback((data, screen: 'show'|'update'|'')=>{
-    select(data)
-    setScreen(screen)
-  }, [select, setScreen])
+  const cancleSelect = ()=>setSelected(()=>({data:{}}))
+
+  const handlePerItem = (idx, screen: 'show'|'update'|'')=>{
+    select(peoples.data[idx], idx)
+    setScreen((old)=>({data: screen, prev: old.data}))
+  }
 
   // const handleOnHold = useCallback(()=>{
 
@@ -46,13 +49,23 @@ const App: () => React$Node = () => {
   // const handleOnUpdate = useCallback(()=>{
   //   setScreen('update')
   // },[])
-  const SlideUp = ()=>{
-    const screens = {
-      'show': <Show {...{...selected.data}}/>,
-      'update': <Show {...{...selected.data}}/>
-    }
-    return screens[screen]
-  }
+
+  const endScreen = useCallback(()=> {
+    setScreen((data)=>({data: '', prev: data.prev}))
+    cancleSelect()
+  }, [])
+  const toEdit = useCallback(()=> {
+    setScreen((old)=>({data: 'update', prev: old.data}))
+  }, [])
+  const save = useCallback((data, idx)=> {     
+    setPeoples((old)=>({data: {...old.data, [idx]: data}}))
+    endScreen()
+    // setScreen((data)=>({data: '', prev: data.prev}))
+    // setScreen((old)=>({data: 'show', prev: old.data}))
+  }, [])
+
+  
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -74,6 +87,7 @@ const App: () => React$Node = () => {
         </View>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
+          showsVerticalScrollIndicator={false}
           style={styles.scrollView}>
           <View style={styles.body}>
             <List peoples={peoples} onPress={handlePerItem}/>
@@ -84,7 +98,7 @@ const App: () => React$Node = () => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => alert("Touch")}
-              style={styles.androidTouchableFab}
+              style={{...styles.androidTouchableFab}}
             >
 
               <IconPlus style={styles.androidImageFab} height={styles.androidImageFab.height} width={styles.androidImageFab.width} />
@@ -93,13 +107,21 @@ const App: () => React$Node = () => {
             null
         }
         {
-          screen ?<SlideUp />:null
+          screen.data?<PopUp data={selected.data[0]} {...{screen: screen.data, endScreen, toEdit, save}}/>:null
         }
       </SafeAreaView>
     </>
   );
 };
 
+const PopUp = ({data, screen, endScreen, toEdit, save})=>{
+
+  const screens = {
+    'show': <Show {...{...data, leftAct: endScreen, rightAct: toEdit}}/>,
+    'update': <Update {...{...data, leftAct: endScreen, rightAct: save}}/>
+  }
+  return screens[screen]
+}
 
 const border = {
   borderColor: 'black',
@@ -149,7 +171,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-
   },
   androidImageFab: {
     width: 25,

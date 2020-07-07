@@ -8,7 +8,7 @@ const Item = ({ idx, name, tel_number, gender, onPress }) => {
 
 
     return (<TouchableOpacity activeOpacity={0.7}
-        onPress={() => onPress({data:{idx, name, tel_number, gender}}, 'show')}
+        onPress={() => onPress(idx, 'show')}
         key={idx} style={styles.sectionContainer}
     >
         <View style={styles.sectionCol1}>

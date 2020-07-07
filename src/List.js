@@ -9,8 +9,8 @@ const List = ({peoples, onPress})=> {
 
     const handleToItem = 
         // useCallback(
-            ({ name, gender, tel_number }, idx) =>
-            <Item key ={idx} {...{idx, name, gender, tel_number, onPress}} />
+            (item, idx) =>
+            <Item key ={idx} {...{idx,...item, onPress}} />
         // , [])
     return Object.values(peoples.data).slice(0).map(handleToItem)
 }
