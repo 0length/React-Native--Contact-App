@@ -29,7 +29,7 @@ function showPropsAreEqual(prevProps, nextProps) {
 
 const Show = ({ name, tel_number, gender, address, email }) => {
   // const {name, tel_number, gender, address } = data[0]
-  // console.log(name, tel_number, gender, address)
+  console.log(name, tel_number, gender, address)
   // console.log("Render Show"+name);
 
   return (<>

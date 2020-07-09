@@ -32,12 +32,12 @@ const Photo = {
 }
 
 const RandomPictures = ({gender, width, height, style})=>{
-    const Pictures: any = Photo[gender]()
-    return <Pictures
+    const Pictures: any = Photo[gender||'male']()
+    return gender?<Pictures
       width={width} 
       height={height}
       style={style}
-    />
+    />:null
   }
 
 export default RandomPictures

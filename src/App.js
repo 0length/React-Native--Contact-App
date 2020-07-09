@@ -58,7 +58,7 @@ const App: () => React$Node = () => {
     setScreen((old)=>({data: 'update', prev: old.data}))
   }, [])
   const save = useCallback((data, idx)=> {     
-    setPeoples((old)=>({data: {...old.data, [idx]: data}}))
+    setPeoples((old)=>({data: {...old.data, [idx||Object.keys(old.data).length]: data}}))
     endScreen()
     // setScreen((data)=>({data: '', prev: data.prev}))
     // setScreen((old)=>({data: 'show', prev: old.data}))
@@ -76,7 +76,7 @@ const App: () => React$Node = () => {
             {
               Platform.OS == 'ios' ? <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => alert("Touch IOS")}
+                onPress={toEdit}
                 style={styles.iosTouchableFab}
               >
                 <IconPlusIOS style={styles.iosImageFab} backgroundColor={"black"} height={styles.iosImageFab.height} width={styles.iosImageFab.width} />
@@ -97,7 +97,7 @@ const App: () => React$Node = () => {
           Platform.OS !== 'ios' ?
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => alert("Touch")}
+              onPress={toEdit}
               style={{...styles.androidTouchableFab}}
             >
 

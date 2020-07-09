@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -9,8 +9,9 @@ import {
   StatusBar,
   Platform,
   TouchableOpacity,
-  ImagePropTypes
+  ImagePropTypes,
 } from 'react-native';
+import { Picker } from '@react-native-community/picker'
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen'
@@ -19,6 +20,7 @@ import BackIOS from './../Assets/back_ios.svg'
 import BackAndroid from './../Assets/back_android.svg'
 import RandomPictures from './RandomPictures';
 import Input from './Input';
+import { border } from './App';
 // import IconPlusIOS from './../Assets/plus_ios.svg'
 
 // interface ShowIProps {
@@ -39,21 +41,64 @@ const Update = ({ name, tel_number, gender, address, email, setData}) => {
         gender={gender}
         style={{ alignSelf: 'center', margin: 20 }}
       />
-      <Text style={styles.name}>{name}</Text>
-      <Input label={"Name"} onChange={(name)=>setData((old)=>({...old, name}))}/>
+      {/* <Text style={styles.name}>{name}</Text> */}
       <View></View>
       <View style={styles.info_wrapper}>
+
+      <View style={styles.info_container}>
+          {/* <Text style={styles.infoLabel}>Telephone : </Text>
+          <Text style={styles.infoValue}>{tel_number}</Text> */}
+          <Input
+            height={25}
+            label={" Name "}
+            value={name}
+            keyboardType={"default"}
+            onChange={(name)=>setData((old)=>({...old, name}))}
+            style={{fontSize: 24}}
+          />
+        </View>
+
         <View style={styles.info_container}>
-          <Text style={styles.infoLabel}>Telephone : </Text>
-          <Text style={styles.infoValue}>{tel_number}</Text>
+          {/* <Text style={styles.infoLabel}>Telephone : </Text>
+          <Text style={styles.infoValue}>{tel_number}</Text> */}
+          <Input
+        height={25}
+        label={"Telephone "}
+        value={tel_number}
+        keyboardType={"numeric"}
+        onChange={(tel_number)=>setData((old)=>({...old, tel_number}))}
+        style={{fontSize: 18}}
+      />
         </View>
         <View style={styles.info_container}>
-          <Text style={styles.infoLabel}>Mail : </Text>
-          <Text style={styles.infoValue}>{email}</Text>
+        <Input
+          height={25}
+          label={"Email "}
+          value={email}
+          keyboardType={"email-address"}
+          onChange={(email)=>setData((old)=>({...old, email}))}
+          style={{fontSize: 16}}
+        />
         </View>
         <View style={styles.info_container}>
-          <Text style={styles.infoLabel}>Address : </Text>
-          <Text style={styles.infoValue}>{address}</Text>
+        <Input
+          height={25}
+          label={"Address "}
+          value={address}
+          keyboardType={"default"}
+          onChange={(address)=>setData((old)=>({...old, address}))}
+          style={{fontSize: 16}}
+        />
+        </View>
+        <View style={styles.info_container}>
+          <Picker
+            selectedValue={gender}
+            onValueChange={(gender)=>setData((old)=>({...old, gender}))}
+          >
+            <Picker.Item label="Select Gender" value="" />
+            <Picker.Item label="Male" value="male" />
+            <Picker.Item label="Female" value="female" />
+          </Picker>
         </View>
       </View>
     </View>
@@ -75,7 +120,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopColor: Colors.light,
     borderStyle: 'solid',
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
+    marginVertical: 5
   },
   name: {
     fontSize: 24,
@@ -109,15 +155,8 @@ const Header = {
 
       />],
   right: [
-    Platform.OS === 'ios' ? <Text key={0} style={{ color: "#0B80FF", fontSize: 16, marginTop: 0, marginLeft: -0.5 }}>Save  </Text>
-    :
-    // null
-    <Image
-      key={0}
-      // width={15}
-      // height={15}
-      source={require('./../Assets/ic_edit.png')}
-      style={{height: 16, width: 16}} />
+    Platform.OS == 'ios' ? <Text key={0} style={{ color: "#0B80FF", fontSize: 16, marginTop: 0, marginLeft: -0.5 }}>Save  </Text>
+    :<Text key={0} style={{ color: "black", fontSize: 16, elevation:12  }}>Save  </Text>
   ]
 }
 
