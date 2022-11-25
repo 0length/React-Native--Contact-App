@@ -37,7 +37,7 @@ const RandomPictures = ({gender, width, height, style})=>{
       width={width} 
       height={height}
       style={style}
-    />:null
+    />:<></>
   }
 
 export default RandomPictures
